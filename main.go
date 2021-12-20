@@ -2,13 +2,52 @@ package main
 
 import (
 	"GoProject_1/repositories/filesystem"
+	"GoProject_1/repositories/models"
 	"fmt"
+	"log"
 )
 
 func main() {
-	repo := filesystem.UserFileRepository{}
+	usr := &models.User{
+		Email:        "user1432@gmail.com",
+		PasswordHash: "pass2335",
+		CreatedAt:    "2021-12-15 17:39:22",
+	}
+	sr := &filesystem.SupplierFileRepository{}
+	suppliers, err := sr.GetAll()
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, supplier := range suppliers {
+		fmt.Println(supplier)
+	}
 
-	repo.GetByEmail("")
+	ur := &filesystem.UserFileRepository{}
+	user, err := ur.GetByEmail("example@test.com")
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(user)
 
-	fmt.Println(repo)
+	createdUser, err := ur.Create(usr)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(createdUser)
+
+	pr := &filesystem.ProductFileRepository{}
+	products, err := pr.GetByCategory("Pizza")
+	if err != nil {
+		log.Fatal(err)
+	}
+	for _, product := range products {
+		fmt.Println(product)
+	}
+
+	or := &filesystem.OrderFileRepository{}
+	order, err := or.GetByID(1)
+	if err != nil {
+		log.Fatal(err)
+	}
+	fmt.Println(order)
 }
